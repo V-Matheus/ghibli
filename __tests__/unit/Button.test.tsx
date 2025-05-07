@@ -7,6 +7,6 @@ describe('Component: Button', () => {
 
     expect(
       screen.getByRole('button', { name: 'Button Content' }),
-    ).toBeInTheDocument();
+    ).toBeVisible();
   });
 });
