@@ -6,7 +6,8 @@ import {
   InputRoot,
 } from '@/components/Input';
 import { Select } from '@/components/Select';
-import { Eye, Heart, Search, Star, StickyNote } from 'lucide-react';
+import Tag from '@/components/Tag';
+import { Eye, Heart, Search, Star, StickyNote, X } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -78,6 +79,28 @@ export default function Home() {
           >
             <Star size={16} />
           </Select>
+        </section>
+
+        <section className="flex flex-wrap gap-2 items-center">
+          <h3 className="text-sm ">Active filters:</h3>
+          <Tag outline color="green">
+            Watched <X size={12} className="cursor-pointer" />
+          </Tag>
+          <Tag outline color="red">
+            Favorites <X size={12} className="cursor-pointer" />
+          </Tag>
+          <Tag outline color="blue">
+            With Notes
+            <X size={12} className="cursor-pointer" />
+          </Tag>
+          <Tag outline color="yellow">
+            5 Stars ⭐⭐⭐⭐⭐
+            <X size={12} className="cursor-pointer" />
+          </Tag>
+          <Tag outline color="purple">
+            Sorted by Duration (Longest)
+            <X size={12} className="cursor-pointer" />
+          </Tag>
         </section>
       </article>
     </main>
