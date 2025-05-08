@@ -1,3 +1,4 @@
+import { Button } from '@/components/Button';
 import {
   InputCheckbox,
   InputFild,
@@ -5,7 +6,7 @@ import {
   InputRoot,
 } from '@/components/Input';
 import { Select } from '@/components/Select';
-import { Search } from 'lucide-react'; 
+import { Eye, Heart, Search, Star, StickyNote } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -30,7 +31,53 @@ export default function Home() {
 
         <section className="flex items-center justify-between">
           <InputCheckbox>Include synopsis in search</InputCheckbox>
-          <Select />
+          <Select
+            options={[
+              { value: 'default', name: 'Default' },
+              { value: 'title-az', name: 'Title (A-Z)' },
+              { value: 'title-za', name: 'Title (Z-A)' },
+              { value: 'duration-shortest', name: 'Duration (Shortest)' },
+              { value: 'duration-longest', name: 'Duration (Longest)' },
+              { value: 'rating-highest', name: 'Your Rating (Highest)' },
+              { value: 'rating-lowest', name: 'Your Rating (Lowest)' },
+              { value: 'score-highest', name: 'Score (Highest)' },
+              { value: 'score-lowest', name: 'Score (Lowest)' },
+            ]}
+          />
+        </section>
+
+        <section className="flex flex-wrap gap-2 items-center">
+          <h3 className="text-sm font-medium">Filters:</h3>
+
+          <Button className="text-sm font-medium px-3 gap-1">
+            <Eye size={16} />
+            Watched
+          </Button>
+
+          <Button className="text-sm font-medium px-3 gap-1">
+            <Heart size={16} />
+            Watched
+          </Button>
+
+          <Button className="text-sm font-medium px-3 gap-1">
+            <StickyNote size={16} />
+            Watched
+          </Button>
+
+          <Select
+            options={[
+              { name: 'All Movies', value: 'all-movies' },
+              { name: 'Any Rating ⭐', value: 'any-rating' },
+              { name: 'Unrated', value: 'unrated' },
+              { name: '5 stars ⭐', value: '5-stars' },
+              { name: '4 stars ⭐', value: '4-stars' },
+              { name: '3 stars ⭐', value: '3-stars' },
+              { name: '2 stars ⭐', value: '2-stars' },
+              { name: '1 star ⭐', value: '1-star' },
+            ]}
+          >
+            <Star size={16} />
+          </Select>
         </section>
       </article>
     </main>

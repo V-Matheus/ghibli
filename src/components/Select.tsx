@@ -2,46 +2,49 @@
 import { ChevronDown } from 'lucide-react';
 import { ComponentProps, useState } from 'react';
 
-export function Select({ ...props }: ComponentProps<'select'>) {
-  const [selectedOrder, setSelectedOrder] = useState('default');
+interface OptionsProps {
+  value: string;
+  name: string;
+}
 
-  const orders = [
-    { value: 'default', name: 'Default' },
-    { value: 'title-az', name: 'Title (A-Z)' },
-    { value: 'title-za', name: 'Title (Z-A)' },
-    { value: 'duration-shortest', name: 'Duration (Shortest)' },
-    { value: 'duration-longest', name: 'Duration (Longest)' },
-    { value: 'rating-highest', name: 'Your Rating (Highest)' },
-    { value: 'rating-lowest', name: 'Your Rating (Lowest)' },
-    { value: 'score-highest', name: 'Score (Highest)' },
-    { value: 'score-lowest', name: 'Score (Lowest)' },
-  ];
+interface SelectProps extends ComponentProps<'select'> {
+  options: OptionsProps[];
+}
+
+export function Select({ options, ...props }: SelectProps) {
+  const [selectOption, setSelectOption] = useState('default');
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newOrder = event.target.value;
-    setSelectedOrder(newOrder);
+    setSelectOption(newOrder);
   };
 
-  console.log(selectedOrder);
-
   return (
-    <div className="relative">
+    <div className={`relative w-fit `}>
+      <div className="flex items-center gap-2 h-10 rounded-md border border-gray-200 px-3 py-2 pr-10 cursor-pointer text-sm text-gray-800 bg-white">
+        {props.children}
+
+        <span className="ml-2">
+          {options.find((option) => option.value === selectOption)?.name}
+        </span>
+        <ChevronDown
+          size={16}
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-400"
+        />
+      </div>
+
       <select
-        className="flex h-10 w-full rounded-md border border-gray-200 px-3 py-2 appearance-none pr-10 cursor-pointer"
-        value={selectedOrder}
+        value={selectOption}
         onChange={handleChange}
+        className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
         {...props}
       >
-        {orders.map((order, index) => (
+        {options.map((order, index) => (
           <option key={index} value={order.value}>
             {order.name}
           </option>
         ))}
       </select>
-      <ChevronDown
-        size={16}
-        className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-400"
-      />
     </div>
   );
 }
