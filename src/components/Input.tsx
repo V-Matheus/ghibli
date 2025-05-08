@@ -5,7 +5,7 @@ export function InputRoot({ ...props }: ComponentProps<'div'>) {
   return (
     <div
       {...props}
-      className="group flex w-full rounded-md border-2 border-gray-400 py-2 text-sm cursor-pointer focus-within:border-black focus-within:border-2 box-border transition-all duration-200 ease-in-out"
+      className="group flex w-full rounded-md border-2 border-gray-200 py-2 text-sm cursor-pointer focus-within:border-black focus-within:border-2 transition-all duration-200 ease-in-out"
       tabIndex={-1}
       onClick={(e) => {
         const input = e.currentTarget.querySelector('input');
