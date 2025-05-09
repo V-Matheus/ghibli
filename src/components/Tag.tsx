@@ -68,7 +68,7 @@ export default function Tag({
             } ${customStyles.border || classes.border}`
           : `${customStyles.bg || classes.solidBg} ${
               customStyles.text || classes.solidText
-            } ${customStyles.border || ''}`, // Aplica a borda personalizada mesmo sem outline
+            } ${customStyles.border || ''}`,
         className,
       )}
       {...props}

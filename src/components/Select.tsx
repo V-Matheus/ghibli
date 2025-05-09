@@ -12,7 +12,7 @@ interface SelectProps extends ComponentProps<'select'> {
 }
 
 export function Select({ options, ...props }: SelectProps) {
-  const [selectOption, setSelectOption] = useState('default');
+  const [selectOption, setSelectOption] = useState(options[0]?.value || '');
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newOrder = event.target.value;

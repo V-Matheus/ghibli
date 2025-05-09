@@ -1,11 +1,11 @@
 import { Button } from '@/components/Button';
-import { Card } from '@/components/Card';
 import {
   InputCheckbox,
   InputFild,
   InputIcon,
   InputRoot,
 } from '@/components/Input';
+import { MovieGrid } from '@/components/MovieGridProps';
 import { Select } from '@/components/Select';
 import Tag from '@/components/Tag';
 import { Eye, Heart, Search, Star, StickyNote, X } from 'lucide-react';
@@ -104,9 +104,7 @@ export default function Home() {
           </Tag>
         </section>
 
-        <div>
-          <Card />
-        </div>
+        <MovieGrid />
       </article>
     </main>
   );

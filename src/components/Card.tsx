@@ -41,22 +41,22 @@ export function Card({ filme, ...props }: CardProps) {
   const toggleDescription = () => {
     setIsDescriptionExpanded(!isDescriptionExpanded);
   };
-  console.log(filme);
 
   return (
     <article
-      className="flex flex-col w-[400px] rounded-lg shadow-sm overflow-hidden transition-all duration-200 hover:shadow-lg border-2 border-gray-200"
+      className="flex flex-col rounded-lg shadow-sm overflow-hidden transition-all duration-200 hover:shadow-lg border-2 border-gray-200"
       {...props}
     >
-      <section className="flex group relative w-full bg-transparent hover:bg-black/25">
+      <section className="flex group relative w-full bg-transparent hover:bg-black/25 aspect-[2/3]">
         <Image
           src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/npOnzAbLh6VOIu3naU5QaEcTepo.jpg"
-          alt="Filme alt"
-          width={600}
-          height={900}
+          alt={filme?.title || 'Filme'}
+          width={300}
+          height={450}
+          className="object-cover w-full h-full"
         />
         <span className="absolute inset-0 flex items-center justify-center text-white text-lg font-semibold opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:bg-black/50">
-          Tenkū no Shiro Rapyuta
+          {filme?.title || 'Título do Filme'}
         </span>
 
         <div className="flex justify-between absolute inset-0 p-2">
@@ -92,15 +92,22 @@ export function Card({ filme, ...props }: CardProps) {
       </section>
 
       <section className="flex flex-col p-4 gap-1">
-        <h2 className="text-lg font-bold">Título</h2>
+        <h2 className="text-lg font-bold">{filme?.title || 'Título'}</h2>
         <div className="flex flex-col gap-2">
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-            1986 • 2h 4m
+            {filme?.release_date || 'Ano'} •{' '}
+            {filme?.running_time
+              ? `${Math.floor(filme.running_time / 60)}h ${
+                  filme.running_time % 60
+                }m`
+              : 'Duração'}
           </p>
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-center gap-1">
               <Star size={16} />
-              <span className="text-sm font-medium">95%</span>
+              <span className="text-sm font-medium">
+                {filme?.rt_score || 'N/A'}%
+              </span>
             </div>
 
             <span className="text-xs text-gray-400 italic">Not rated</span>
@@ -111,11 +118,8 @@ export function Card({ filme, ...props }: CardProps) {
                 isDescriptionExpanded ? '' : 'line-clamp-3'
               }`}
             >
-              Two sisters move to the country with their father in order to be
-              closer to their hospitalized mother, and discover the surrounding
-              trees are inhabited by Totoros, magical spirits of the forest.
-              When the youngest runs away from home, the older sister seeks help
-              from the spirits to find her.
+              {filme?.description ||
+                'Descrição do filme não disponível no momento.'}
             </p>
             <Button
               onClick={toggleDescription}
@@ -136,8 +140,8 @@ export function Card({ filme, ...props }: CardProps) {
           </div>
 
           <div className="text-xs text-gray-500">
-            <p>Director: Hayao Miyazaki</p>
-            <p>Producer: Hayao Miyazaki</p>
+            <p>Director: {filme?.director || 'Desconhecido'}</p>
+            <p>Producer: {filme?.producer || 'Desconhecido'}</p>
           </div>
 
           <div className="flex flex-col items-center pt-0 gap-4">
