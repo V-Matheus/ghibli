@@ -11,29 +11,13 @@ import {
 } from 'lucide-react';
 import { Button } from './Button';
 import Tag from './Tag';
-
-interface FilmeProps {
-  id: number;
-  title: string;
-  original_title: string;
-  original_title_romanised: string;
-  description: string;
-  director: string;
-  producer: string;
-  release_date: string;
-  running_time: number;
-  rt_score: number;
-  people: string[];
-  species: string[];
-  locations: string[];
-  vehicles: string[];
-}
+import { FilmProps } from '@/service/films';
 
 interface CardProps extends ComponentProps<'article'> {
-  filme?: FilmeProps;
+  film?: FilmProps;
 }
 
-export function Card({ filme, ...props }: CardProps) {
+export function Card({ film, ...props }: CardProps) {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isWatched, setIsWatched] = useState(false);
@@ -49,14 +33,14 @@ export function Card({ filme, ...props }: CardProps) {
     >
       <section className="flex group relative w-full bg-transparent hover:bg-black/25 aspect-[2/3]">
         <Image
-          src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/npOnzAbLh6VOIu3naU5QaEcTepo.jpg"
-          alt={filme?.title || 'Filme'}
+          src={film?.image || '/images/placeholder.png'}
+          alt={film?.title || 'Film'}
           width={300}
           height={450}
           className="object-cover w-full h-full"
         />
         <span className="absolute inset-0 flex items-center justify-center text-white text-lg font-semibold opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:bg-black/50">
-          {filme?.title || 'Título do Filme'}
+          {film?.original_title_romanised || 'Original Titler Romanised'}
         </span>
 
         <div className="flex justify-between absolute inset-0 p-2">
@@ -91,14 +75,14 @@ export function Card({ filme, ...props }: CardProps) {
         </div>
       </section>
 
-      <section className="flex flex-col p-4 gap-1">
-        <h2 className="text-lg font-bold">{filme?.title || 'Título'}</h2>
-        <div className="flex flex-col gap-2">
+      <section className="flex flex-1 flex-col p-4 gap-1">
+        <h2 className="text-lg font-bold">{film?.title || 'Título'}</h2>
+        <div className="flex flex-1 flex-col gap-2">
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
-            {filme?.release_date || 'Ano'} •{' '}
-            {filme?.running_time
-              ? `${Math.floor(filme.running_time / 60)}h ${
-                  filme.running_time % 60
+            {film?.release_date || 'Ano'} •{' '}
+            {film?.running_time
+              ? `${Math.floor(Number(film.running_time) / 60)}h ${
+                  Number(film.running_time) % 60
                 }m`
               : 'Duração'}
           </p>
@@ -106,7 +90,7 @@ export function Card({ filme, ...props }: CardProps) {
             <div className="flex items-center justify-center gap-1">
               <Star size={16} />
               <span className="text-sm font-medium">
-                {filme?.rt_score || 'N/A'}%
+                {film?.rt_score || 'N/A'}%
               </span>
             </div>
 
@@ -118,8 +102,8 @@ export function Card({ filme, ...props }: CardProps) {
                 isDescriptionExpanded ? '' : 'line-clamp-3'
               }`}
             >
-              {filme?.description ||
-                'Descrição do filme não disponível no momento.'}
+              {film?.description ||
+                'Descrição do film não disponível no momento.'}
             </p>
             <Button
               onClick={toggleDescription}
@@ -139,9 +123,9 @@ export function Card({ filme, ...props }: CardProps) {
             </Button>
           </div>
 
-          <div className="text-xs text-gray-500">
-            <p>Director: {filme?.director || 'Desconhecido'}</p>
-            <p>Producer: {filme?.producer || 'Desconhecido'}</p>
+          <div className="text-xs text-gray-500 mb-auto">
+            <p>Director: {film?.director || 'Desconhecido'}</p>
+            <p>Producer: {film?.producer || 'Desconhecido'}</p>
           </div>
 
           <div className="flex flex-col items-center pt-0 gap-4">
