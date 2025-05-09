@@ -1,4 +1,5 @@
 import { Button } from '@/components/Button';
+import { Card } from '@/components/Card';
 import {
   InputCheckbox,
   InputFild,
@@ -57,12 +58,12 @@ export default function Home() {
 
           <Button className="text-sm font-medium px-3 gap-1">
             <Heart size={16} />
-            Watched
+            Favorites
           </Button>
 
           <Button className="text-sm font-medium px-3 gap-1">
             <StickyNote size={16} />
-            Watched
+            With Notes
           </Button>
 
           <Select
@@ -102,6 +103,10 @@ export default function Home() {
             <X size={12} className="cursor-pointer" />
           </Tag>
         </section>
+
+        <div>
+          <Card />
+        </div>
       </article>
     </main>
   );
