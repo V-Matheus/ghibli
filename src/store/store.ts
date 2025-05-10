@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import filmsReducer from './slices/films-slice';
+import filtersReducer from './slices/filters-slice';
 
 export const store = configureStore({
   reducer: {
     films: filmsReducer,
+    filters: filtersReducer,
   },
 });
 

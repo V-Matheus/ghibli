@@ -35,6 +35,8 @@ export function Card({ film, ...props }: CardProps) {
 
   const isFavorite = interaction?.isFavorite || false;
   const isWatched = interaction?.isWatched || false;
+  const notes = interaction?.note || '';
+  const rate = interaction?.rate || 0;
 
   const handleFavoriteToggle = () => {
     dispatch(setFilms({ id: film!.id, isFavorite: !isFavorite }));
@@ -56,11 +58,9 @@ export function Card({ film, ...props }: CardProps) {
     formState: { errors },
   } = useForm<{ rate: number; note: string }>();
 
-  const rate = watch('rate');
+  const rateCard = watch('rate');
 
   const onSubmit: SubmitHandler<{ rate: number; note: string }> = (data) => {
-    console.log(data);
-
     dispatch(
       setFilms({
         id: film!.id,
@@ -103,21 +103,26 @@ export function Card({ film, ...props }: CardProps) {
             </Tag>
           )}
 
-          <Tag color="blue">
-            <StickyNote size={12} fill="#1447e6 " />
-            Notes
-          </Tag>
-          <Tag
-            color="yellow"
-            customStyles={{
-              bg: 'bg-gradient-to-r from-yellow-400 to-amber-500',
-              text: 'text-gray-800',
-              border: 'border-gray-300',
-            }}
-          >
-            <Star size={12} className="text-black" fill="#000000" />
-            5/5
-          </Tag>
+          {notes && (
+            <Tag color="blue">
+              <StickyNote size={12} fill="#1447e6 " />
+              Notes
+            </Tag>
+          )}
+
+          {rate > 0 && (
+            <Tag
+              color="yellow"
+              customStyles={{
+                bg: 'bg-gradient-to-r from-yellow-400 to-amber-500',
+                text: 'text-gray-800',
+                border: 'border-gray-300',
+              }}
+            >
+              <Star size={12} className="text-black" fill="#000000" />
+              {`${rate}/5`}
+            </Tag>
+          )}
         </div>
       </section>
 
@@ -290,13 +295,13 @@ export function Card({ film, ...props }: CardProps) {
                     <Star
                       className={`${
                         (hoveredRating !== null && index < hoveredRating) ||
-                        (rate !== null && index < rate)
+                        (rateCard !== null && index < rateCard)
                           ? 'text-yellow-500'
                           : 'text-gray-400'
                       }`}
                       fill={
                         (hoveredRating !== null && index < hoveredRating) ||
-                        (rate !== null && index < rate)
+                        (rateCard !== null && index < rateCard)
                           ? '#efb100'
                           : 'none'
                       }
@@ -306,7 +311,7 @@ export function Card({ film, ...props }: CardProps) {
                 ))}
 
                 <span className="text-xs sm:text-sm text-gray-600">
-                  {rate ? `${rate}/5` : 'Not rated'}
+                  {rateCard ? `${rateCard}/5` : 'Not rated'}
                 </span>
               </div>
             </section>

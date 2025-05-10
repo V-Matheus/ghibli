@@ -5,7 +5,7 @@ interface FilmInteraction {
   isWatched?: boolean;
   isFavorite?: boolean;
   note?: string | null;
-  rate?:  number | null;
+  rate?: number | null;
 }
 
 interface FilmsState {
