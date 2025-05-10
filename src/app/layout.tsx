@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { ClientProvider } from '@/components/ClientProvider';
 
 export const metadata: Metadata = {
   title: 'Studio Ghibli',
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={` antialiased`}>{children}</body>
+      <ClientProvider>
+        <body className={` antialiased`}>{children}</body>
+      </ClientProvider>
     </html>
   );
 }

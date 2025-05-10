@@ -11,7 +11,9 @@ import {
 } from 'lucide-react';
 import { Button } from './Button';
 import Tag from './Tag';
-import { FilmProps } from '@/service/films';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFilms } from '@/store/slices/films-slice';
+import { RootState } from '@/store/store';
 
 interface CardProps extends ComponentProps<'article'> {
   film?: FilmProps;
@@ -19,8 +21,23 @@ interface CardProps extends ComponentProps<'article'> {
 
 export function Card({ film, ...props }: CardProps) {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [isWatched, setIsWatched] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const interaction = useSelector((state: RootState) =>
+    state.films.interactiveFilms.find((i) => i.id === film?.id),
+  );
+
+  const isFavorite = interaction?.isFavorite || false;
+  const isWatched = interaction?.isWatched || false;
+
+  const handleFavoriteToggle = () => {
+    dispatch(setFilms({ id: film!.id, isFavorite: !isFavorite }));
+  };
+
+  const handleWatchedToggle = () => {
+    dispatch(setFilms({ id: film!.id, isWatched: !isWatched }));
+  };
 
   const toggleDescription = () => {
     setIsDescriptionExpanded(!isDescriptionExpanded);
@@ -131,7 +148,7 @@ export function Card({ film, ...props }: CardProps) {
           <div className="flex flex-col items-center pt-0 gap-4">
             <div className="flex w-full items-center justify-between h-9 gap-2 text-white">
               <Button
-                onClick={() => setIsWatched(!isWatched)}
+                onClick={() => handleWatchedToggle()}
                 className={`h-full justify-center gap-2 rounded-lg w-full whitespace-nowrap transition-colors border-2 ${
                   isWatched
                     ? 'bg-black text-white border-black hover:bg-gray-900 hover:border-gray-900'
@@ -146,7 +163,7 @@ export function Card({ film, ...props }: CardProps) {
               </Button>
 
               <Button
-                onClick={() => setIsFavorite(!isFavorite)}
+                onClick={() => handleFavoriteToggle()}
                 className={`h-full justify-center gap-2 rounded-lg w-full whitespace-nowrap transition-colors border-2 ${
                   isFavorite
                     ? 'bg-red-500 text-white border-red-500 hover:bg-red-600'

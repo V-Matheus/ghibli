@@ -5,7 +5,7 @@ import {
   InputIcon,
   InputRoot,
 } from '@/components/Input';
-import { MovieGrid } from '@/components/MovieGridProps';
+import { MovieGrid } from '@/components/FilmsGrid';
 import { Select } from '@/components/Select';
 import Tag from '@/components/Tag';
 import { Eye, Heart, Search, Star, StickyNote, X } from 'lucide-react';
