@@ -60,35 +60,36 @@ export function Card({ film, ...props }: CardProps) {
           {film?.original_title_romanised || 'Original Titler Romanised'}
         </span>
 
-        <div className="flex justify-between absolute inset-0 p-2">
-          <div>
-            <Tag color="red">
-              <Heart size={12} className="text-white" fill="#FFFFFF" />
-              Favorite
-            </Tag>
-          </div>
+        {isFavorite && (
+          <Tag className="absolute left-2 top-2 h-5" color="red">
+            <Heart size={12} className="text-white" fill="#FFFFFF" />
+            Favorite
+          </Tag>
+        )}
 
-          <div className="flex flex-col items-end gap-1">
+        <div className="flex absolute right-2 top-2 flex-col items-end gap-1">
+          {isWatched && (
             <Tag color="green">
               <Eye size={12} fill="#008236" />
               Watched
             </Tag>
-            <Tag color="blue">
-              <StickyNote size={12} fill="#1447e6 " />
-              Notes
-            </Tag>
-            <Tag
-              color="yellow"
-              customStyles={{
-                bg: 'bg-gradient-to-r from-yellow-400 to-amber-500',
-                text: 'text-gray-800',
-                border: 'border-gray-300',
-              }}
-            >
-              <Star size={12} className="text-black" fill="#000000 " />
-              5/5
-            </Tag>
-          </div>
+          )}
+
+          <Tag color="blue">
+            <StickyNote size={12} fill="#1447e6 " />
+            Notes
+          </Tag>
+          <Tag
+            color="yellow"
+            customStyles={{
+              bg: 'bg-gradient-to-r from-yellow-400 to-amber-500',
+              text: 'text-gray-800',
+              border: 'border-gray-300',
+            }}
+          >
+            <Star size={12} className="text-black" fill="#000000 " />
+            5/5
+          </Tag>
         </div>
       </section>
 
@@ -149,7 +150,7 @@ export function Card({ film, ...props }: CardProps) {
             <div className="flex w-full items-center justify-between h-9 gap-2 text-white">
               <Button
                 onClick={() => handleWatchedToggle()}
-                className={`h-full justify-center gap-2 rounded-lg w-full whitespace-nowrap transition-colors border-2 ${
+                className={`text-xs md:text-sm h-full justify-center gap-2 rounded-lg w-full whitespace-nowrap transition-colors border-2 ${
                   isWatched
                     ? 'bg-black text-white border-black hover:bg-gray-900 hover:border-gray-900'
                     : 'bg-white text-black border-gray-200 hover:bg-gray-100'
@@ -164,7 +165,7 @@ export function Card({ film, ...props }: CardProps) {
 
               <Button
                 onClick={() => handleFavoriteToggle()}
-                className={`h-full justify-center gap-2 rounded-lg w-full whitespace-nowrap transition-colors border-2 ${
+                className={`text-xs md:text-sm h-full justify-center gap-2 rounded-lg w-full whitespace-nowrap transition-colors border-2 ${
                   isFavorite
                     ? 'bg-red-500 text-white border-red-500 hover:bg-red-600'
                     : 'bg-white text-black border-gray-200 hover:bg-gray-100'
@@ -179,7 +180,7 @@ export function Card({ film, ...props }: CardProps) {
               </Button>
             </div>
 
-            <Button className="w-full justify-center items-center gap-2 whitespace-nowrap text-sm font-medium transition-colors border-2 border-gray-200 hover:bg-gray-100 h-9 rounded-md">
+            <Button className="w-full justify-center items-center gap-2 whitespace-nowrap text-xs md:text-sm font-medium transition-colors border-2 border-gray-200 hover:bg-gray-100 h-9 rounded-md">
               <StickyNote size={16} />
               With Notes
             </Button>
