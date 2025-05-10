@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setFilms } from '@/store/slices/films-slice';
 import { RootState } from '@/store/store';
 import { Modal } from './Modal';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface CardProps extends ComponentProps<'article'> {
   film?: FilmProps;
@@ -25,7 +26,6 @@ export function Card({ film, ...props }: CardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [hoveredRating, setHoveredRating] = useState<number | null>(null);
-  const [note, setNote] = useState('');
 
   const dispatch = useDispatch();
 
@@ -48,9 +48,27 @@ export function Card({ film, ...props }: CardProps) {
     setIsDescriptionExpanded(!isDescriptionExpanded);
   };
 
-  const handleNoteChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = event.target.value;
-    setNote(value);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<{ rate: number; note: string }>();
+
+  const rate = watch('rate');
+
+  const onSubmit: SubmitHandler<{ rate: number; note: string }> = (data) => {
+    console.log(data);
+
+    dispatch(
+      setFilms({
+        id: film!.id,
+        note: data.note,
+        rate: data.rate,
+      }),
+    );
+    setIsModalOpen(false);
   };
 
   return (
@@ -122,7 +140,30 @@ export function Card({ film, ...props }: CardProps) {
               </span>
             </div>
 
-            <span className="text-xs text-gray-400 italic">Not rated</span>
+            <span className="text-xs text-gray-400 italic">
+              {interaction?.rate ? (
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: 5 }, (_, index) => (
+                    <Star
+                      key={index}
+                      className={`${
+                        interaction?.rate && index < interaction.rate
+                          ? 'text-yellow-500'
+                          : 'text-gray-400'
+                      }`}
+                      fill={
+                        interaction?.rate && index < interaction.rate
+                          ? '#efb100'
+                          : 'none'
+                      }
+                      size={12}
+                    />
+                  ))}
+                </div>
+              ) : (
+                'Not rated'
+              )}
+            </span>
           </div>
           <div className="flex flex-col gap-3">
             <p
@@ -155,6 +196,18 @@ export function Card({ film, ...props }: CardProps) {
             <p>Director: {film?.director || 'Desconhecido'}</p>
             <p>Producer: {film?.producer || 'Desconhecido'}</p>
           </div>
+
+          {interaction?.note && (
+            <div className="p-2 bg-blue-50 rounded-md">
+              <div className="flex items-center gap-2">
+                <StickyNote size={12} className="text-blue-500" />
+                <span className="text-xs font-medium text-blue-600">
+                  Your Notes:
+                </span>
+              </div>
+              <p className="text-xs text-gray-600">{interaction.note}</p>
+            </div>
+          )}
 
           <div className="flex flex-col items-center pt-0 gap-4">
             <div className="flex w-full items-center justify-between h-9 gap-2 text-white">
@@ -203,7 +256,10 @@ export function Card({ film, ...props }: CardProps) {
 
       {isModalOpen && (
         <Modal onClose={() => setIsModalOpen(false)} open>
-          <form className="flex flex-col gap-6 md:p-8">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-6 md:p-8"
+          >
             <section className="flex items-center justify-between">
               <h3 className="text-base sm:text-lg md:text-xls font-semibold">
                 Edit Notes for {film?.title}
@@ -227,16 +283,20 @@ export function Card({ film, ...props }: CardProps) {
                 {Array.from({ length: 5 }, (_, index) => (
                   <Button
                     key={index}
+                    type="button"
                     onMouseEnter={() => setHoveredRating(index + 1)}
+                    onClick={() => setValue('rate', index + 1)}
                   >
                     <Star
                       className={`${
-                        hoveredRating !== null && index < hoveredRating
+                        (hoveredRating !== null && index < hoveredRating) ||
+                        (rate !== null && index < rate)
                           ? 'text-yellow-500'
                           : 'text-gray-400'
                       }`}
                       fill={
-                        hoveredRating !== null && index < hoveredRating
+                        (hoveredRating !== null && index < hoveredRating) ||
+                        (rate !== null && index < rate)
                           ? '#efb100'
                           : 'none'
                       }
@@ -246,7 +306,7 @@ export function Card({ film, ...props }: CardProps) {
                 ))}
 
                 <span className="text-xs sm:text-sm text-gray-600">
-                  Not rated
+                  {rate ? `${rate}/5` : 'Not rated'}
                 </span>
               </div>
             </section>
@@ -259,12 +319,12 @@ export function Card({ film, ...props }: CardProps) {
                 Your Notes:
               </label>
               <textarea
-                onChange={handleNoteChange}
+                {...register('note', { required: true })}
                 id="note"
                 className="w-full h-[150px] p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:border-black resize-none text-sm sm:text-base"
                 placeholder="Write your thoughts about this movie..."
               />
-              {note.length === 0 && (
+              {errors.note && (
                 <span className="text-xs sm:text-sm text-red-500">
                   Notes cannot be empty
                 </span>
@@ -281,11 +341,11 @@ export function Card({ film, ...props }: CardProps) {
 
               <Button
                 type="submit"
-                disabled={note.length < 1}
+                disabled={!!errors.note}
                 className={`text-white rounded-md text-sm font-medium transition-colors focus:outline-none border h-10 px-4 py-2 ${
-                  note.length >= 1
-                    ? 'border-gray-200 bg-black hover:bg-gray-900'
-                    : 'border-gray-300 bg-gray-500 cursor-not-allowed'
+                  !!errors.note
+                    ? 'border-gray-300 bg-gray-500 cursor-not-allowed'
+                    : 'border-gray-200 bg-black hover:bg-gray-900'
                 }`}
               >
                 Save Notes
