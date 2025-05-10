@@ -41,7 +41,7 @@ jobs:
 
       - name: Build Project
         env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
         run: vercel build --token ${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy to Vercel
