@@ -8,19 +8,24 @@ import {
   Heart,
   Star,
   StickyNote,
+  X,
 } from 'lucide-react';
 import { Button } from './Button';
 import Tag from './Tag';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilms } from '@/store/slices/films-slice';
 import { RootState } from '@/store/store';
+import { Modal } from './Modal';
 
 interface CardProps extends ComponentProps<'article'> {
   film?: FilmProps;
 }
 
 export function Card({ film, ...props }: CardProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [hoveredRating, setHoveredRating] = useState<number | null>(null);
+  const [note, setNote] = useState('');
 
   const dispatch = useDispatch();
 
@@ -41,6 +46,11 @@ export function Card({ film, ...props }: CardProps) {
 
   const toggleDescription = () => {
     setIsDescriptionExpanded(!isDescriptionExpanded);
+  };
+
+  const handleNoteChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = event.target.value;
+    setNote(value);
   };
 
   return (
@@ -87,7 +97,7 @@ export function Card({ film, ...props }: CardProps) {
               border: 'border-gray-300',
             }}
           >
-            <Star size={12} className="text-black" fill="#000000 " />
+            <Star size={12} className="text-black" fill="#000000" />
             5/5
           </Tag>
         </div>
@@ -106,7 +116,7 @@ export function Card({ film, ...props }: CardProps) {
           </p>
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-center gap-1">
-              <Star size={16} />
+              <Star className="text-yellow-500" fill="#efb100" size={16} />
               <span className="text-sm font-medium">
                 {film?.rt_score || 'N/A'}%
               </span>
@@ -180,13 +190,110 @@ export function Card({ film, ...props }: CardProps) {
               </Button>
             </div>
 
-            <Button className="w-full justify-center items-center gap-2 whitespace-nowrap text-xs md:text-sm font-medium transition-colors border-2 border-gray-200 hover:bg-gray-100 h-9 rounded-md">
+            <Button
+              onClick={() => setIsModalOpen(true)}
+              className="w-full justify-center items-center gap-2 whitespace-nowrap text-xs md:text-sm font-medium transition-colors border-2 border-gray-200 hover:bg-gray-100 h-9 rounded-md"
+            >
               <StickyNote size={16} />
               With Notes
             </Button>
           </div>
         </div>
       </section>
+
+      {isModalOpen && (
+        <Modal onClose={() => setIsModalOpen(false)} open>
+          <form className="flex flex-col gap-6 md:p-8">
+            <section className="flex items-center justify-between">
+              <h3 className="text-base sm:text-lg md:text-xls font-semibold">
+                Edit Notes for {film?.title}
+              </h3>
+
+              <X
+                onClick={() => setIsModalOpen(false)}
+                className="cursor-pointer"
+                size={16}
+              />
+            </section>
+
+            <section className="flex flex-col gap-4">
+              <label className="text-sm sm:text-base font-medium">
+                Your Rating:
+              </label>
+              <div
+                className="flex items-center gap-2"
+                onMouseLeave={() => setHoveredRating(null)}
+              >
+                {Array.from({ length: 5 }, (_, index) => (
+                  <Button
+                    key={index}
+                    onMouseEnter={() => setHoveredRating(index + 1)}
+                  >
+                    <Star
+                      className={`${
+                        hoveredRating !== null && index < hoveredRating
+                          ? 'text-yellow-500'
+                          : 'text-gray-400'
+                      }`}
+                      fill={
+                        hoveredRating !== null && index < hoveredRating
+                          ? '#efb100'
+                          : 'none'
+                      }
+                      size={24}
+                    />
+                  </Button>
+                ))}
+
+                <span className="text-xs sm:text-sm text-gray-600">
+                  Not rated
+                </span>
+              </div>
+            </section>
+
+            <section className="flex flex-col gap-4">
+              <label
+                htmlFor="note"
+                className="text-sm sm:text-base font-medium"
+              >
+                Your Notes:
+              </label>
+              <textarea
+                onChange={handleNoteChange}
+                id="note"
+                className="w-full h-[150px] p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:border-black resize-none text-sm sm:text-base"
+                placeholder="Write your thoughts about this movie..."
+              />
+              {note.length === 0 && (
+                <span className="text-xs sm:text-sm text-red-500">
+                  Notes cannot be empty
+                </span>
+              )}
+            </section>
+
+            <section className="flex items-center justify-end gap-2">
+              <Button
+                onClick={() => setIsModalOpen(false)}
+                className="rounded-md text-xs sm:text-sm font-medium transition-colors focus:outline-none border border-gray-200 hover:bg-gray-100 h-10 px-4 py-2"
+              >
+                Cancel
+              </Button>
+
+              <Button
+                type="submit"
+                disabled={note.length < 1}
+                className={`text-white rounded-md text-sm font-medium transition-colors focus:outline-none border h-10 px-4 py-2 ${
+                  note.length >= 1
+                    ? 'border-gray-200 bg-black hover:bg-gray-900'
+                    : 'border-gray-300 bg-gray-500 cursor-not-allowed'
+                }`}
+              >
+                Save Notes
+              </Button>
+            </section>
+          </form>
+        </Modal>
+      )}
     </article>
   );
 }

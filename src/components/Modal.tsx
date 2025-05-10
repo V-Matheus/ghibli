@@ -16,10 +16,10 @@ export function Modal({ onClose, ...props }: ModalProps) {
   return (
     <dialog
       {...props}
-      className="absolute w-full h-full inset-0 flex items-center justify-center bg-black/35 z-50"
+      className="flex items-center justify-center fixed flex-1 w-full h-full inset-0 bg-black/35 z-50"
       onClick={handleClickOutside}
     >
-      <article className="bg-white w-[660px] p-6 rounded-2xl border-1 border-gray-medium">
+      <article className="bg-white w-3/4 max-w-[660px] p-5 rounded-2xl border-1 border-gray-medium">
         {props.children}
       </article>
     </dialog>
