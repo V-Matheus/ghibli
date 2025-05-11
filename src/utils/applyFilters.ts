@@ -6,9 +6,10 @@ export function applyFilters(
   filters: FiltersState,
   interactions: FilmInteraction[],
 ): FilmProps[] {
-  const { isWatched, isFavorite, withNotes, minStars, search } = filters;
+  const { isWatched, isFavorite, withNotes, minStars, search, sortOrder } =
+    filters;
 
-  return films.filter((film) => {
+  const filteredFilms = films.filter((film) => {
     const interaction = interactions.find((i) => i.id === film.id);
 
     if (isWatched && interaction?.isWatched !== isWatched) {
@@ -69,4 +70,33 @@ export function applyFilters(
 
     return true;
   });
+
+  const sortedFilms = [...filteredFilms].sort((a, b) => {
+    switch (sortOrder) {
+      case 'title-az':
+        return a.title.localeCompare(b.title);
+      case 'title-za':
+        return b.title.localeCompare(a.title);
+      case 'duration-shortest':
+        return parseInt(a.running_time, 10) - parseInt(b.running_time, 10);
+      case 'duration-longest':
+        return parseInt(b.running_time, 10) - parseInt(a.running_time, 10);
+      case 'rating-highest':
+        return (
+          parseInt(b.rt_score || '0', 10) - parseInt(a.rt_score || '0', 10)
+        );
+      case 'rating-lowest':
+        return (
+          parseInt(a.rt_score || '0', 10) - parseInt(b.rt_score || '0', 10)
+        );
+      case 'score-highest':
+        return parseInt(b.rt_score, 10) - parseInt(a.rt_score, 10);
+      case 'score-lowest':
+        return parseInt(a.rt_score, 10) - parseInt(b.rt_score, 10);
+      default:
+        return 0;
+    }
+  });
+
+  return sortedFilms;
 }

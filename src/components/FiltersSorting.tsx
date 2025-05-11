@@ -24,9 +24,8 @@ import { RootState } from '@/store/store';
 export function FiltersSorting() {
   const dispatch = useDispatch();
 
-  const { isWatched, isFavorite, withNotes, minStars, search } = useSelector(
-    (state: RootState) => state.filters,
-  );
+  const { isWatched, isFavorite, withNotes, minStars, search, sortOrder } =
+    useSelector((state: RootState) => state.filters);
 
   const hasActiveFilters = isWatched || isFavorite || withNotes || minStars;
 
@@ -52,7 +51,7 @@ export function FiltersSorting() {
         </InputCheckbox>
         <Select
           options={[
-            { value: 'default', name: 'Default' },
+            { value: '', name: 'Default' },
             { value: 'title-az', name: 'Title (A-Z)' },
             { value: 'title-za', name: 'Title (Z-A)' },
             { value: 'duration-shortest', name: 'Duration (Shortest)' },
@@ -62,7 +61,25 @@ export function FiltersSorting() {
             { value: 'score-highest', name: 'Score (Highest)' },
             { value: 'score-lowest', name: 'Score (Lowest)' },
           ]}
-          selectedOption="Default"
+          selectedOption={
+            sortOrder === 'title-az'
+              ? 'Title (A-Z)'
+              : sortOrder === 'title-za'
+              ? 'Title (Z-A)'
+              : sortOrder === 'duration-shortest'
+              ? 'Duration (Shortest)'
+              : sortOrder === 'duration-longest'
+              ? 'Duration (Longest)'
+              : sortOrder === 'rating-highest'
+              ? 'Your Rating (Highest)'
+              : sortOrder === 'rating-lowest'
+              ? 'Your Rating (Lowest)'
+              : sortOrder === 'score-highest'
+              ? 'Score (Highest)'
+              : sortOrder === 'score-lowest'
+              ? 'Score (Lowest)'
+              : 'Default'
+          }
           onChange={(option) => dispatch(setSortOrder(option.target.value))}
         />
       </section>

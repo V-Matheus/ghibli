@@ -31,14 +31,14 @@ export function useFilms() {
         !filtersState.isWatched &&
         !filtersState.isFavorite &&
         !filtersState.withNotes &&
+        !filtersState.sortOrder &&
         (!filtersState.minStars || filtersState.minStars === '') &&
         (!filtersState.search.query || filtersState.search.query.trim() === '');
-
 
       const filtered = noFiltersActive
         ? films
         : applyFilters(films, filtersState, filmInteractions);
-        
+
       setLocalStorage('filteredFilms', JSON.stringify(filtered));
       setFilteredFilms(filtered);
     } catch (err) {
