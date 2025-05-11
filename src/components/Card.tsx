@@ -17,6 +17,7 @@ import { setFilms } from '@/store/slices/films-slice';
 import { RootState } from '@/store/store';
 import { Modal } from './Modal';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 interface CardProps extends ComponentProps<'article'> {
   film?: FilmProps;
@@ -39,10 +40,52 @@ export function Card({ film, ...props }: CardProps) {
 
   const handleFavoriteToggle = () => {
     dispatch(setFilms({ id: film!.id, isFavorite: !isFavorite }));
+
+    toast.success(
+      <div
+        className={`flex flex-col rounded-md ${
+          !isFavorite ? 'text-red-800' : 'text-black'
+        }`}
+      >
+        <strong className="text-sm font-semibold">
+          {isFavorite ? 'Removed from favorites' : 'Added to favorites'}
+        </strong>
+        <p className="text-sm opacity-90">{film?.title} has been updated</p>
+      </div>,
+      {
+        draggable: true,
+        theme: 'light',
+        icon: false,
+        className: isFavorite
+          ? 'border bg-gray-100 border-gray-200'
+          : 'border bg-red-50 border-red-200',
+      },
+    );
   };
 
   const handleWatchedToggle = () => {
     dispatch(setFilms({ id: film!.id, isWatched: !isWatched }));
+
+    toast.success(
+      <div
+        className={`flex flex-col rounded-md ${
+          !isWatched ? 'text-green-800' : 'text-black'
+        }`}
+      >
+        <strong className="text-sm font-semibold">
+          {isWatched ? 'Marked as watched ' : 'Marked as watched '}
+        </strong>
+        <p className="text-sm opacity-90">{film?.title} has been updated</p>
+      </div>,
+      {
+        draggable: true,
+        theme: 'light',
+        icon: false,
+        className: isWatched
+          ? 'border bg-gray-100 border-gray-200'
+          : 'border bg-green-50 border-green-200',
+      },
+    );
   };
 
   const toggleDescription = () => {
@@ -66,6 +109,20 @@ export function Card({ film, ...props }: CardProps) {
         note: data.note,
         rate: data.rate,
       }),
+    );
+    setIsModalOpen(false);
+
+    toast.success(
+      <div className={'flex flex-col rounded-md text-blue-800'}>
+        <strong className="text-sm font-semibold">Notes updated</strong>
+        <p className="text-sm opacity-90">{film?.title} has been updated</p>
+      </div>,
+      {
+        draggable: true,
+        theme: 'light',
+        icon: false,
+        className: 'border bg-blue-50 border-blue-200',
+      },
     );
     setIsModalOpen(false);
   };
@@ -227,7 +284,7 @@ export function Card({ film, ...props }: CardProps) {
                   size={16}
                   className={isWatched ? 'text-white' : 'text-black'}
                 />
-                Watched
+                {isWatched ? 'Watched' : 'Mark Watched'}
               </Button>
 
               <Button
@@ -243,7 +300,7 @@ export function Card({ film, ...props }: CardProps) {
                   fill={isFavorite ? 'currentColor' : 'none'}
                   className={isFavorite ? 'text-white' : 'text-black'}
                 />
-                Favorites
+                {isFavorite ? 'Favorites' : 'Add Favorite'}
               </Button>
             </div>
 
