@@ -1,7 +1,7 @@
 import { MovieGrid } from '@/components/FilmsGrid';
 import { FiltersSorting } from '@/components/FiltersSorting';
 
-export default function Home() {
+export default async function Home() {
   return (
     <main className="flex flex-col flex-1 p-4 md:p-8">
       <header className="flex flex-col items-center justify-center w-full gap-4 mb-8">

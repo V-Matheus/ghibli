@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface FilmInteraction {
+export interface FilmInteraction {
   id: string;
   isWatched?: boolean;
   isFavorite?: boolean;

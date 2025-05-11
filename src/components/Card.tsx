@@ -28,7 +28,6 @@ export function Card({ film, ...props }: CardProps) {
   const [hoveredRating, setHoveredRating] = useState<number | null>(null);
 
   const dispatch = useDispatch();
-
   const interaction = useSelector((state: RootState) =>
     state.films.interactiveFilms.find((i) => i.id === film?.id),
   );
@@ -253,7 +252,7 @@ export function Card({ film, ...props }: CardProps) {
               className="w-full justify-center items-center gap-2 whitespace-nowrap text-xs md:text-sm font-medium transition-colors border-2 border-gray-200 hover:bg-gray-100 h-9 rounded-md"
             >
               <StickyNote size={16} />
-              With Notes
+              {notes ? 'Edit Notes' : 'Add Notes'}
             </Button>
           </div>
         </div>

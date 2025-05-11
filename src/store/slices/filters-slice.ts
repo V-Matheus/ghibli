@@ -5,7 +5,7 @@ interface SearchFilter {
   includeSynopsis: boolean | null;
 }
 
-interface FiltersState {
+export interface FiltersState {
   isWatched: boolean | null;
   isFavorite: boolean | null;
   withNotes: boolean | null;
