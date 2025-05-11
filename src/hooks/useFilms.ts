@@ -39,6 +39,9 @@ export function useFilms() {
         ? films
         : applyFilters(films, filtersState, filmInteractions);
 
+        console.log('Filtered films:', filtered);
+        
+
       setLocalStorage('filteredFilms', JSON.stringify(filtered));
       setFilteredFilms(filtered);
     } catch (err) {

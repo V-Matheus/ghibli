@@ -9,6 +9,8 @@ export function applyFilters(
   const { isWatched, isFavorite, withNotes, minStars, search, sortOrder } =
     filters;
 
+  console.log('films', films);
+
   const filteredFilms = films.filter((film) => {
     const interaction = interactions.find((i) => i.id === film.id);
 
@@ -49,25 +51,25 @@ export function applyFilters(
       }
     }
 
-    if (
-      search.query &&
-      !film.title.toLowerCase().includes(search.query.toLowerCase())
-    ) {
-      return false;
+    if (search.query) {
+      const matchesTitle = film.title
+        .toLowerCase()
+        .includes(search.query.toLowerCase());
+
+      const matchesSynopsis = film.description
+        ?.toLowerCase()
+        .includes(search.query.toLowerCase());
+
+      if (search.includeSynopsis) {
+        if (!matchesTitle && !matchesSynopsis) {
+          return false;
+        }
+      } else {
+        if (!matchesTitle) {
+          return false;
+        }
+      }
     }
-
-    // if (search.includeSynopsis && search.query) {
-    //   const matchesSynopsis = film.synopsis
-    //     ?.toLowerCase()
-    //     .includes(search.query.toLowerCase());
-    //   const matchesTitle = film.title
-    //     .toLowerCase()
-    //     .includes(search.query.toLowerCase());
-    //   if (!matchesSynopsis && !matchesTitle) {
-    //     return false;
-    //   }
-    // }
-
     return true;
   });
 
