@@ -28,11 +28,14 @@ export const InputFild = (props: ComponentProps<'input'>) => {
   );
 };
 
-export const InputCheckbox = (props: ComponentProps<'label'>) => {
+export const InputCheckbox = ({
+  children,
+  ...props
+}: ComponentProps<'input'> & { children: React.ReactNode }) => {
   return (
-    <label {...props} className="flex items-center gap-2">
-      <input type="checkbox" />
-      {props.children}
+    <label className="flex items-center gap-2 cursor-pointer">
+      <input type="checkbox" {...props} className="cursor-pointer" />
+      <span>{children}</span>
     </label>
   );
 };

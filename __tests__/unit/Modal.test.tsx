@@ -26,7 +26,7 @@ describe('Component: Modal', () => {
 
     const modal = screen.getByRole('dialog');
     expect(modal).toHaveClass(
-      'absolute w-full h-full inset-0 flex items-center justify-center bg-black/35 z-50',
+      'flex items-center justify-center fixed flex-1 w-full h-full inset-0 bg-black/35 z-50',
     );
   });
 

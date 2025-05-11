@@ -12,7 +12,10 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setFavoriteFilter,
+  setIncludeSynopsis,
   setMinStarsFilter,
+  setSearchQuery,
+  setSortOrder,
   setWatchedFilter,
   setWithNotesFilter,
 } from '@/store/slices/filters-slice';
@@ -21,7 +24,7 @@ import { RootState } from '@/store/store';
 export function FiltersSorting() {
   const dispatch = useDispatch();
 
-  const { isWatched, isFavorite, withNotes, minStars } = useSelector(
+  const { isWatched, isFavorite, withNotes, minStars, search } = useSelector(
     (state: RootState) => state.filters,
   );
 
@@ -33,11 +36,20 @@ export function FiltersSorting() {
         <InputIcon>
           <Search size={20} />
         </InputIcon>
-        <InputFild placeholder="Search movies..." />
+        <InputFild
+          placeholder="Search movies..."
+          value={search.query || ''}
+          onChange={(e) => dispatch(setSearchQuery(e.target.value))}
+        />
       </InputRoot>
 
       <section className="flex items-center justify-between">
-        <InputCheckbox>Include synopsis in search</InputCheckbox>
+        <InputCheckbox
+          checked={search.includeSynopsis || false}
+          onChange={(e) => dispatch(setIncludeSynopsis(e.target.checked))}
+        >
+          Include synopsis in search
+        </InputCheckbox>
         <Select
           options={[
             { value: 'default', name: 'Default' },
@@ -51,6 +63,7 @@ export function FiltersSorting() {
             { value: 'score-lowest', name: 'Score (Lowest)' },
           ]}
           selectedOption="Default"
+          onChange={(option) => dispatch(setSortOrder(option.target.value))}
         />
       </section>
 

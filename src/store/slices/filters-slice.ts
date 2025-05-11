@@ -1,10 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+interface SearchFilter {
+  query: string | null;
+  includeSynopsis: boolean | null;
+}
+
 interface FiltersState {
   isWatched: boolean | null;
   isFavorite: boolean | null;
   withNotes: boolean | null;
   minStars: string | null;
+  sortOrder: string | null;
+  search: SearchFilter;
 }
 
 const initialState: FiltersState = {
@@ -12,6 +19,11 @@ const initialState: FiltersState = {
   isFavorite: null,
   withNotes: null,
   minStars: null,
+  sortOrder: null,
+  search: {
+    query: null,
+    includeSynopsis: false,
+  },
 };
 
 const filtersSlice = createSlice({
@@ -30,11 +42,25 @@ const filtersSlice = createSlice({
     setMinStarsFilter(state, action: PayloadAction<string | null>) {
       state.minStars = action.payload;
     },
+    setSortOrder(state, action: PayloadAction<string | null>) {
+      state.sortOrder = action.payload;
+    },
+    setSearchQuery(state, action: PayloadAction<string>) {
+      state.search.query = action.payload;
+    },
+    setIncludeSynopsis(state, action: PayloadAction<boolean>) {
+      state.search.includeSynopsis = action.payload;
+    },
     resetFilters(state) {
       state.isWatched = null;
       state.isFavorite = null;
       state.withNotes = null;
       state.minStars = null;
+      state.sortOrder = null;
+      state.search = {
+        query: '',
+        includeSynopsis: false,
+      };
     },
   },
 });
@@ -45,6 +71,9 @@ export const {
   setWithNotesFilter,
   setMinStarsFilter,
   resetFilters,
+  setSortOrder,
+  setSearchQuery,
+  setIncludeSynopsis,
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;
